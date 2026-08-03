@@ -10,19 +10,17 @@
     var right = block.querySelector('.mp2-col-right');
     if (!right) { return; }
 
-    // Ensure the default state is expanded, regardless of stray CSS.
-    right.classList.remove('mp2-collapsed');
-
+    // Default (collapsed) comes from CSS, so no flash. Toggle from here.
     var hideLink = right.querySelector('a.mp2-toggle-hide');
     var showLink = right.querySelector('a.mp2-toggle-show');
 
     function collapse(e) {
       if (e) { e.preventDefault(); }
-      right.classList.add('mp2-collapsed');
+      right.classList.remove('mp2-expanded');
     }
     function expand(e) {
       if (e) { e.preventDefault(); }
-      right.classList.remove('mp2-collapsed');
+      right.classList.add('mp2-expanded');
     }
 
     if (hideLink) { hideLink.addEventListener('click', collapse); }

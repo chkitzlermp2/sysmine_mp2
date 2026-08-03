@@ -56,14 +56,17 @@ div.attributes > .mp2-attributes {
   cursor: pointer;
 }
 
-/* DEFAULT = expanded: show the "hide" link + the details, hide "show" link. */
-.mp2-attributes .mp2-toggle-show { display: none; }
-.mp2-attributes .mp2-details    { display: block !important; }
+/* DEFAULT = collapsed: details hidden, "show" link visible, "hide" link off.
+   This is the state before JS runs too, so there is no expand-then-collapse
+   flash on load. mp2.js adds .mp2-expanded to open it. */
+.mp2-attributes .mp2-toggle-hide { display: none; }
+.mp2-attributes .mp2-toggle-show { display: inline-block; }
+.mp2-attributes .mp2-details     { display: none !important; }
 
-/* Collapsed state (mp2.js toggles .mp2-collapsed on .mp2-col-right). */
-.mp2-attributes .mp2-col-right.mp2-collapsed .mp2-toggle-hide { display: none; }
-.mp2-attributes .mp2-col-right.mp2-collapsed .mp2-toggle-show { display: inline-block; }
-.mp2-attributes .mp2-col-right.mp2-collapsed .mp2-details     { display: none !important; }
+/* Expanded state (mp2.js toggles .mp2-expanded on .mp2-col-right). */
+.mp2-attributes .mp2-col-right.mp2-expanded .mp2-toggle-hide { display: inline-block; }
+.mp2-attributes .mp2-col-right.mp2-expanded .mp2-toggle-show { display: none; }
+.mp2-attributes .mp2-col-right.mp2-expanded .mp2-details     { display: block !important; }
 
 /* --------------------------------------------------------------------------
    Customer mode ("darkmode" setting): hide mp2-internal figures such as
