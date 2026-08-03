@@ -1,0 +1,5 @@
+<p>
+  <%= content_tag(:label, l(:label_darkmode)) %>
+  <%= check_box_tag 'settings[darkmode]', 1, @settings[:darkmode] %>
+  <em class="info"><%= l(:label_darkmode_info) %></em>
+</p>
