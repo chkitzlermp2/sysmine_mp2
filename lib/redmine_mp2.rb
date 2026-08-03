@@ -8,6 +8,14 @@ module RedmineMp2
     require File.expand_path('../redmine_mp2/patches/issue_patch', __FILE__)
     require File.expand_path('../redmine_mp2/patches/projects_controller_patch', __FILE__)
   end
+
+  # Deface overrides. Kept under lib/ (not app/overrides) so Zeitwerk never
+  # tries to autoload them as constants. `load` re-runs the Deface::Override.new
+  # calls on every reload, which is what Deface expects.
+  def self.load_overrides
+    return unless defined?(Deface)
+    load File.expand_path('../redmine_mp2/overrides/remove_project_members_box.rb', __FILE__)
+  end
 end
 
 # View hooks (safe to require at load time).
@@ -15,4 +23,5 @@ require File.expand_path('../redmine_mp2/hooks', __FILE__)
 
 Rails.configuration.to_prepare do
   RedmineMp2.setup
+  RedmineMp2.load_overrides
 end
