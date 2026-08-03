@@ -7,11 +7,14 @@
     var block = document.querySelector('.mp2-attributes');
     if (!block) { return; }
 
-    var right = block.querySelector('.splitcontentright');
+    var right = block.querySelector('.mp2-col-right');
     if (!right) { return; }
 
-    var hideLink = right.querySelector('a.hideExpanded');
-    var showLink = right.querySelector('a.showCollapsed');
+    // Ensure the default state is expanded, regardless of stray CSS.
+    right.classList.remove('mp2-collapsed');
+
+    var hideLink = right.querySelector('a.mp2-toggle-hide');
+    var showLink = right.querySelector('a.mp2-toggle-show');
 
     function collapse(e) {
       if (e) { e.preventDefault(); }

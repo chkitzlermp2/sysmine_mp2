@@ -8,24 +8,27 @@
    only our block. No core template is overridden.
    -------------------------------------------------------------------------- */
 
-/* Hide all stock children of the core attributes container ... */
-div.attributes > * {
-  display: none;
+/* Hide the stock attribute rows (core renders them as .splitcontent inside
+   div.attributes) but keep our injected .mp2-attributes visible. Targeting
+   the core's own wrappers is safer than hiding every child. */
+div.attributes > .splitcontent {
+  display: none !important;
 }
-/* ... except our injected block. */
 div.attributes > .mp2-attributes {
   display: block;
 }
 
-/* Two-column split (mirrors core .splitcontent spacing). */
-.mp2-attributes .splitcontent {
-  display: flex;
-  gap: 1em;
+/* Two-column split. Own class names + !important so we don't fight or
+   inherit core .splitcontent / .detailsCollapsed rules. */
+.mp2-attributes .mp2-split {
+  display: flex !important;
+  gap: 1.5em;
+  align-items: flex-start;
 }
-.mp2-attributes .splitcontentleft,
-.mp2-attributes .splitcontentright {
+.mp2-attributes .mp2-col {
   flex: 1 1 50%;
   min-width: 0;
+  float: none !important; /* neutralize any inherited float */
 }
 
 /* Attribute rows. */
@@ -45,23 +48,22 @@ div.attributes > .mp2-attributes {
   vertical-align: top;
 }
 
-/* Collapse / expand toggle for the right column. */
-.mp2-attributes a.hideExpanded,
-.mp2-attributes a.showCollapsed {
+/* Toggle links for the right column. */
+.mp2-attributes .mp2-toggle {
   display: inline-block;
   font-weight: bold;
   margin-bottom: 0.5em;
   cursor: pointer;
 }
 
-/* Default state = expanded: show "hide" link + content, hide "show" link. */
-.mp2-attributes a.showCollapsed { display: none; }
-.mp2-attributes .detailsCollapsed { display: block; }
+/* DEFAULT = expanded: show the "hide" link + the details, hide "show" link. */
+.mp2-attributes .mp2-toggle-show { display: none; }
+.mp2-attributes .mp2-details    { display: block !important; }
 
-/* Collapsed state (toggled by mp2.js on the .splitcontentright wrapper). */
-.mp2-attributes .splitcontentright.mp2-collapsed a.hideExpanded { display: none; }
-.mp2-attributes .splitcontentright.mp2-collapsed a.showCollapsed { display: inline-block; }
-.mp2-attributes .splitcontentright.mp2-collapsed .detailsCollapsed { display: none; }
+/* Collapsed state (mp2.js toggles .mp2-collapsed on .mp2-col-right). */
+.mp2-attributes .mp2-col-right.mp2-collapsed .mp2-toggle-hide { display: none; }
+.mp2-attributes .mp2-col-right.mp2-collapsed .mp2-toggle-show { display: inline-block; }
+.mp2-attributes .mp2-col-right.mp2-collapsed .mp2-details     { display: none !important; }
 
 /* --------------------------------------------------------------------------
    Customer mode ("darkmode" setting): hide mp2-internal figures such as

@@ -34,15 +34,18 @@ module RedmineMp2
 					end
 
 					def to_html
+					  # Own mp2- classes only (no core class names like
+					  # splitcontent / detailsCollapsed) to avoid inheriting
+					  # core CSS such as `.detailsCollapsed { display:none }`.
 					  content =
-					    content_tag('div', @left.reduce(&:+), :class => 'splitcontentleft') +
+					    content_tag('div', @left.reduce(&:+), :class => 'mp2-col mp2-col-left') +
 						content_tag('div',
-							content_tag('a', 'Zusätzliche Informationen', :id => 'hideAttributes', :href => '#hideAttributes', :class => 'hideExpanded') +
-							content_tag('a', 'Zusätzliche Informationen', :id => 'showAttributes', :href => '#showAttributes', :class => 'showCollapsed') +
-							content_tag('div', @right.reduce(&:+), :class => 'detailsCollapsed'),
-						:class => 'splitcontentright')
+							content_tag('a', l(:label_mp2_additional_info), :href => '#', :class => 'mp2-toggle mp2-toggle-hide') +
+							content_tag('a', l(:label_mp2_additional_info), :href => '#', :class => 'mp2-toggle mp2-toggle-show') +
+							content_tag('div', @right.reduce(&:+), :class => 'mp2-details'),
+						:class => 'mp2-col mp2-col-right')
 
-					  content_tag('div', content, :class => 'splitcontent')
+					  content_tag('div', content, :class => 'mp2-split')
 					end
 
 					def cells(label, text, options={})
