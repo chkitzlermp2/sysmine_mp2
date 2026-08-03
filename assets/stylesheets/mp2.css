@@ -56,6 +56,17 @@ div.attributes > .mp2-attributes {
   cursor: pointer;
 }
 
+/* Disclosure arrow before the toggle label. Collapsed = ▸, expanded = ▾. */
+.mp2-attributes .mp2-toggle::before {
+  content: "\25B8"; /* ▸ right-pointing triangle */
+  display: inline-block;
+  margin-right: 0.4em;
+  font-size: 0.9em;
+}
+.mp2-attributes .mp2-col-right.mp2-expanded .mp2-toggle::before {
+  content: "\25BE"; /* ▾ down-pointing triangle */
+}
+
 /* DEFAULT = collapsed: details hidden, "show" link visible, "hide" link off.
    This is the state before JS runs too, so there is no expand-then-collapse
    flash on load. mp2.js adds .mp2-expanded to open it. */

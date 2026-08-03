@@ -3,7 +3,7 @@ require File.expand_path('../lib/redmine_mp2', __FILE__)
 
 Redmine::Plugin.register :redmine_mp2 do
   name 'Redmine MP2 Plugin'
-  author 'Wolfgang Dichler'
+  author 'Christoph Kitzler'
   description 'Changes for MP2 Dev Team'
   version '2.0.0'
   url 'http://www.mp2.at'
