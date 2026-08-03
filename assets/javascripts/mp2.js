@@ -56,10 +56,26 @@
     });
   }
 
+  // On the project overview: move the mp2 phase table to the very top of the
+  // content area (the hook renders it after <%= yield %>, i.e. at the bottom),
+  // and hide the members box. Guarded by presence of .mp2-phase-overview so it
+  // only affects the project overview page.
+  function arrangeProjectOverview() {
+    var phase = document.querySelector('.mp2-phase-overview');
+    if (!phase) { return; }
+
+    var content = document.getElementById('content');
+    if (content && phase.parentNode === content) {
+      content.insertBefore(phase, content.firstChild);
+    }
+    // (Members box is hidden via CSS to avoid a load flash.)
+  }
+
   function init() {
     initCollapse();
     initCustomerMode();
     promoteEditFields();
+    arrangeProjectOverview();
   }
 
   // Re-run after Redmine refreshes the issue form via ajax.
