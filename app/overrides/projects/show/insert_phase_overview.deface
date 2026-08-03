@@ -1,2 +1,0 @@
-insert_before 'div.issues.box'
-partial 'projects/mp2_phase_overview'

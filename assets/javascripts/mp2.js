@@ -56,10 +56,30 @@
     });
   }
 
+  // On the project overview: move the mp2 phase table (rendered at the bottom
+  // by the hook) directly above the Tickets box (core: div.issues.box), i.e.
+  // below the project information. Guarded by .mp2-phase-overview presence.
+  // NOTE: our own phase block also contains a .issues.box, so we must exclude
+  // anything inside .mp2-phase-overview when locating the core Tickets box.
+  function arrangeProjectOverview() {
+    var phase = document.querySelector('.mp2-phase-overview');
+    if (!phase) { return; }
+
+    var ticketsBox = null;
+    var boxes = document.querySelectorAll('#content .issues.box');
+    for (var i = 0; i < boxes.length; i++) {
+      if (!phase.contains(boxes[i])) { ticketsBox = boxes[i]; break; }
+    }
+    if (ticketsBox && ticketsBox.parentNode && ticketsBox !== phase) {
+      ticketsBox.parentNode.insertBefore(phase, ticketsBox);
+    }
+  }
+
   function init() {
     initCollapse();
     initCustomerMode();
     promoteEditFields();
+    arrangeProjectOverview();
   }
 
   // Re-run after Redmine refreshes the issue form via ajax.

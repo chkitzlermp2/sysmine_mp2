@@ -12,6 +12,13 @@ module RedmineMp2
         super
         return unless @project
 
+        # Suppress the members box on the project overview WITHOUT touching any
+        # view: the core _members_box partial renders only `if
+        # @principals_by_role.any?`, so clearing it here means the box (and all
+        # member names/roles) is never emitted into the HTML. This is more
+        # robust than a Deface selector and leaks no data to the client.
+        @principals_by_role = {}
+
         cond = @project.project_condition(Setting.display_subprojects_issues?)
         @open_issues_by_state = {}
         PHASE_STATUS_IDS.each do |sid|
