@@ -1,1 +1,1 @@
-<!-- remove 'erb[loud]:contains("members_box")' -->
+remove 'erb[loud]:contains("members_box")'
