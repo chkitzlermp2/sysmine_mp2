@@ -56,19 +56,20 @@
     });
   }
 
-  // On the project overview: move the mp2 phase table to the very top of the
-  // content area (the hook renders it after <%= yield %>, i.e. at the bottom),
-  // and hide the members box. Guarded by presence of .mp2-phase-overview so it
-  // only affects the project overview page.
+  // On the project overview: place the mp2 phase table directly above the
+  // "Tickets" box (core: div.issues.box), i.e. below the project information
+  // and above the ticket counts. The hook renders it at the very bottom of
+  // #content, so we relocate it. Guarded by .mp2-phase-overview presence.
   function arrangeProjectOverview() {
     var phase = document.querySelector('.mp2-phase-overview');
     if (!phase) { return; }
 
-    var content = document.getElementById('content');
-    if (content && phase.parentNode === content) {
-      content.insertBefore(phase, content.firstChild);
+    // The Tickets box is the core issues box on the project overview.
+    var ticketsBox = document.querySelector('#content .issues.box');
+    if (ticketsBox && ticketsBox.parentNode) {
+      ticketsBox.parentNode.insertBefore(phase, ticketsBox);
     }
-    // (Members box is hidden via CSS to avoid a load flash.)
+    // (Members box removal is handled server-side via Deface.)
   }
 
   function init() {
