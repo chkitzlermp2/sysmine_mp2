@@ -36,9 +36,10 @@ module RedmineMp2
       end
     end
 
-    # Injected before page content: mp2 welcome banner (home page) and the
-    # mp2 phase overview table (project overview). Restricted per controller
-    # so each block only appears where it belongs.
+    # Injected before page content: mp2 welcome banner (home page).
+    # The project phase overview is inserted server-side via Deface
+    # (app/overrides/projects/show/insert_phase_overview.deface), so it is not
+    # handled here anymore.
     def view_layouts_base_content(context = {})
       controller = context[:controller]
       return '' unless controller
@@ -50,19 +51,6 @@ module RedmineMp2
         out << tag.div(class: 'mp2-banner') do
           link_to('', 'https://www.mp2.at/', class: 'main_banner_1') +
             link_to('', 'https://www.mp2.at/', class: 'main_banner_2')
-        end
-      end
-
-      # Project overview phase table.
-      if controller.is_a?(ProjectsController) && controller.action_name == 'show'
-        project = controller.instance_variable_get(:@project)
-        trackers = controller.instance_variable_get(:@trackers)
-        state_counts = controller.instance_variable_get(:@open_issues_by_state)
-        if project && trackers.present? && state_counts.present?
-          out << controller.send(:render_to_string,
-            partial: 'projects/mp2_phase_overview',
-            locals:  { project: project, trackers: trackers,
-                       state_counts: state_counts })
         end
       end
 

@@ -18,6 +18,11 @@ Redmine::Plugin.register :redmine_mp2 do
   }
   
   settings(default: default_settings, partial: 'settings/mp2settings')
+
+  # Top menu entry "Meine Tickets" (merged in from the former
+  # redmine_mp2_topbar plugin). Links to a saved query. The query id is
+  # environment-specific — adjust query_id if it differs in your Redmine.
+  menu :top_menu, :mytickets, '/issues?query_id=68', caption: 'Meine Tickets'
 end
 
 class RedmineMP2Helper
