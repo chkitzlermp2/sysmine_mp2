@@ -9,12 +9,11 @@ module RedmineMp2
     require File.expand_path('../redmine_mp2/patches/projects_controller_patch', __FILE__)
   end
 
-  # Deface overrides. Kept under lib/ (not app/overrides) so Zeitwerk never
-  # tries to autoload them as constants. `load` re-runs the Deface::Override.new
-  # calls on every reload, which is what Deface expects.
+  # Deface overrides. The override file defines the constant Zeitwerk expects
+  # for its path, so it autoloads cleanly; we just trigger registration here.
   def self.load_overrides
     return unless defined?(Deface)
-    load File.expand_path('../redmine_mp2/overrides/remove_project_members_box.rb', __FILE__)
+    RedmineMp2::Overrides::RemoveProjectMembersBox.apply
   end
 end
 

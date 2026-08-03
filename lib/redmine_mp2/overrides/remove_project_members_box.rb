@@ -6,14 +6,26 @@
 # the compiled view, so the partial is never executed and the data never
 # reaches the client.
 #
-# Requires the `deface` gem. Loaded explicitly from lib/redmine_mp2.rb via
-# `load` inside a to_prepare block, NOT autoloaded. It deliberately lives under
-# lib/ (not app/overrides) so Zeitwerk never tries to treat it as a constant,
-# which would abort the Rails 8 boot.
+# This file lives under lib/ which Redmine adds to the Zeitwerk autoload paths,
+# so it MUST define the constant Zeitwerk expects for its path
+# (RedmineMp2::Overrides::RemoveProjectMembersBox). We therefore wrap the
+# Deface::Override in a module and register it from an .apply method that is
+# called in a to_prepare block (see lib/redmine_mp2.rb).
+#
 # Target: app/views/projects/show.html.erb, the line
 #   <%= render :partial => 'members_box' %>
-Deface::Override.new(
-  virtual_path: 'projects/show',
-  name: 'mp2-remove-members-box',
-  remove: 'erb[loud]:contains("members_box")'
-)
+module RedmineMp2
+  module Overrides
+    module RemoveProjectMembersBox
+      def self.apply
+        return unless defined?(Deface)
+
+        Deface::Override.new(
+          virtual_path: 'projects/show',
+          name: 'mp2-remove-members-box',
+          remove: 'erb[loud]:contains("members_box")'
+        )
+      end
+    end
+  end
+end
