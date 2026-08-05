@@ -48,5 +48,14 @@ module SysmineMp2
     def cf_key(custom_field)
       "cf_#{custom_field.id}"
     end
+
+    # All movable field keys (internal + custom fields). Used by the edit-form
+    # JS to place every field explicitly: configured keys go right, the rest
+    # go left (Redmine's own left/right split is otherwise inconsistent).
+    def all_field_keys
+      internal = INTERNAL_FIELDS.map { |key, _label| key }
+      custom = issue_custom_fields.map { |cf| cf_key(cf) }
+      internal + custom
+    end
   end
 end

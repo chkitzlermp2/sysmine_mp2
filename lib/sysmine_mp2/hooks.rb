@@ -21,8 +21,10 @@ module SysmineMp2
     def view_layouts_base_html_head(context = {})
       customer_mode = SysmineMP2Helper.get_setting(:darkmode).to_s == '1'
       right_fields = SysmineMp2::FieldConfig.right_field_keys.join(',')
+      all_fields = SysmineMp2::FieldConfig.all_field_keys.join(',')
       tag.meta(name: 'mp2-customer-mode', content: customer_mode.to_s) +
         tag.meta(name: 'mp2-right-fields', content: right_fields) +
+        tag.meta(name: 'mp2-all-fields', content: all_fields) +
         tag.meta(name: 'mp2-additional-label', content: l(:label_mp2_additional_info)) +
         stylesheet_link_tag('mp2', plugin: 'sysmine_mp2') +
         javascript_include_tag('mp2', plugin: 'sysmine_mp2')

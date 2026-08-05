@@ -39,7 +39,13 @@
   // fields in a separate block below .splitcontent; we relocate the two
   // Read the configured "right column" field keys from the meta tag.
   function mp2RightFields() {
-    var meta = document.querySelector('meta[name="mp2-right-fields"]');
+    return mp2MetaList('mp2-right-fields');
+  }
+  function mp2AllFields() {
+    return mp2MetaList('mp2-all-fields');
+  }
+  function mp2MetaList(name) {
+    var meta = document.querySelector('meta[name="' + name + '"]');
     if (!meta) { return []; }
     return meta.getAttribute('content').split(',')
       .map(function (s) { return s.trim(); })
@@ -64,20 +70,23 @@
     return el.closest('p');
   }
 
-  // On the issue EDIT form, move the configured fields into a collapsible
-  // right column that mirrors the show page ("Zusätzliche Informationen").
+  // On the issue EDIT form, place EVERY movable field explicitly: configured
+  // keys go into the collapsible right column, all others into the left
+  // column. Redmine's own left/right split is inconsistent (e.g. it puts
+  // parent issue / dates on the right), so we normalise it here.
   function arrangeEditForm(root) {
     root = root || document;
     var form = root.querySelector('#issue-form');
     if (!form) { return; }
 
-    var right = form.querySelector('.splitcontentright');
-    if (!right) { return; }
+    var leftCol = form.querySelector('.splitcontentleft');
+    var rightCol = form.querySelector('.splitcontentright');
+    if (!leftCol || !rightCol) { return; }
 
-    var keys = mp2RightFields();
-    if (!keys.length) { return; }
+    var rightKeys = mp2RightFields();
+    var allKeys = mp2AllFields();
 
-    // Build (once) a collapsible wrapper at the top of the right column.
+    // Build (once) the collapsible wrapper at the top of the right column.
     var wrapper = form.querySelector('.mp2-edit-additional');
     if (!wrapper) {
       wrapper = document.createElement('div');
@@ -94,7 +103,7 @@
 
       wrapper.appendChild(toggle);
       wrapper.appendChild(details);
-      right.insertBefore(wrapper, right.firstChild);
+      rightCol.insertBefore(wrapper, rightCol.firstChild);
 
       toggle.addEventListener('click', function (e) {
         e.preventDefault();
@@ -103,13 +112,30 @@
     }
     var detailsContainer = wrapper.querySelector('.mp2-details');
 
-    // Move each configured field into the details container (once).
-    keys.forEach(function (key) {
+    // Place every known field. Configured -> right (collapsible); else left.
+    allKeys.forEach(function (key) {
       var p = mp2FindFieldWrapper(root, key);
-      if (!p || p.classList.contains('mp2-moved') || wrapper.contains(p)) { return; }
-      p.classList.add('mp2-moved');
-      detailsContainer.appendChild(p);
+      if (!p) { return; }
+
+      if (rightKeys.indexOf(key) !== -1) {
+        // Move into the collapsible details container (once).
+        if (!wrapper.contains(p)) {
+          p.classList.add('mp2-moved-right');
+          detailsContainer.appendChild(p);
+        }
+      } else {
+        // Move into the left column (once), unless it's already there.
+        if (p.parentNode !== leftCol && !p.classList.contains('mp2-moved-left')) {
+          p.classList.add('mp2-moved-left');
+          leftCol.appendChild(p);
+        }
+      }
     });
+
+    // If nothing ended up on the right, drop the empty wrapper.
+    if (!detailsContainer.children.length) {
+      wrapper.remove();
+    }
   }
 
   // On the project overview: move the mp2 phase table (rendered at the bottom
