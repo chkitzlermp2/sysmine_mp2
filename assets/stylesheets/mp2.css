@@ -9,9 +9,14 @@
    -------------------------------------------------------------------------- */
 
 /* Hide the stock attribute rows (core renders them as .splitcontent inside
-   div.attributes) but keep our injected .mp2-attributes visible. Targeting
-   the core's own wrappers is safer than hiding every child. */
-div.attributes > .splitcontent {
+   div.attributes) but keep our injected .mp2-attributes visible.
+
+   IMPORTANT: scope this to containers that actually hold our .mp2-attributes
+   block (the issue SHOW page). The issue EDIT form also renders its fields in
+   div.attributes > .splitcontent; without :has() the rule would hide the edit
+   form too, making "Assignee" and the additional-info fields disappear while
+   editing. :has() ensures we only hide the core rows when our block is present. */
+div.attributes:has(> .mp2-attributes) > .splitcontent {
   display: none !important;
 }
 div.attributes > .mp2-attributes {
