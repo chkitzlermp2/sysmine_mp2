@@ -40,15 +40,21 @@ module RedmineMp2
 					  # NOTE: this runs inside a plain Ruby object, not a view,
 					  # so the `l` helper is unavailable -> use I18n.t directly.
 					  label = I18n.t(:label_mp2_additional_info)
-					  content =
-					    content_tag('div', @left.reduce(&:+), :class => 'mp2-col mp2-col-left') +
-						content_tag('div',
-							content_tag('a', label, :href => '#', :class => 'mp2-toggle mp2-toggle-hide') +
-							content_tag('a', label, :href => '#', :class => 'mp2-toggle mp2-toggle-show') +
-							content_tag('div', @right.reduce(&:+), :class => 'mp2-details'),
-						:class => 'mp2-col mp2-col-right')
 
-					  content_tag('div', content, :class => 'mp2-split')
+					  left_html = content_tag('div', @left.reduce(&:+), :class => 'mp2-col mp2-col-left')
+
+					  # Only render the collapsible right column when it has fields.
+					  if @right.any?
+					    right_html = content_tag('div',
+					      content_tag('a', label, :href => '#', :class => 'mp2-toggle mp2-toggle-hide') +
+					      content_tag('a', label, :href => '#', :class => 'mp2-toggle mp2-toggle-show') +
+					      content_tag('div', @right.reduce(&:+), :class => 'mp2-details'),
+					    :class => 'mp2-col mp2-col-right')
+					  else
+					    right_html = ''.html_safe
+					  end
+
+					  content_tag('div', left_html + right_html, :class => 'mp2-split')
 					end
 
 					def cells(label, text, options={})
@@ -69,13 +75,14 @@ module RedmineMp2
 					values = issue.visible_custom_field_values.reject {|value| value.custom_field.full_width_layout?}
 					return if values.empty?
 					values.each_with_index do |value, i|
-                                          if value.custom_field.id == 24 || value.custom_field.id == 44
-							css = "cf_#{value.custom_field.id} "
-							rows.left custom_field_name_tag(value.custom_field), show_value(value), :class => css
-						  else
+						key = "cf_#{value.custom_field.id}"
+						if RedmineMp2::FieldConfig.right?(key)
 							css = "cf_#{value.custom_field.id} collapsed"
 							rows.right custom_field_name_tag(value.custom_field), show_value(value), :class => css
-						  end
+						else
+							css = "cf_#{value.custom_field.id} "
+							rows.left custom_field_name_tag(value.custom_field), show_value(value), :class => css
+						end
 					end
 				end
 			end		

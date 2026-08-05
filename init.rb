@@ -14,7 +14,12 @@ Redmine::Plugin.register :redmine_mp2 do
     
   # add setting
   default_settings = {
-    darkmode: 0
+    darkmode: 0,
+    # Field keys that appear in the right, collapsible "Additional Information"
+    # column (issue view + edit form). Empty by default; configure in the
+    # plugin settings. Keys: internal field names (e.g. "assigned_to_id") or
+    # "cf_<id>" for custom fields.
+    right_fields: []
   }
   
   settings(default: default_settings, partial: 'settings/mp2settings')

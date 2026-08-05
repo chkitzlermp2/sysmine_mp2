@@ -140,3 +140,28 @@ body.mp2-customer-mode .mp2-attributes .spent-time {
   background-size: cover;
   background-position: center;
 }
+
+/* --------------------------------------------------------------------------
+   Edit form: collapsible "Zusätzliche Informationen" block in the right
+   column, mirroring the show page. Fields are moved here by mp2.js based on
+   the plugin's field configuration.
+   -------------------------------------------------------------------------- */
+.mp2-edit-additional .mp2-toggle {
+  display: inline-block;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  cursor: pointer;
+}
+.mp2-edit-additional .mp2-toggle::before {
+  content: "\25B8"; /* collapsed: right triangle */
+  display: inline-block;
+  margin-right: 0.4em;
+  font-size: 0.9em;
+}
+.mp2-edit-additional.mp2-expanded .mp2-toggle::before {
+  content: "\25BE"; /* expanded: down triangle */
+}
+
+/* Collapsed by default (before JS/CSS class), expanded via .mp2-expanded. */
+.mp2-edit-additional .mp2-details { display: none; }
+.mp2-edit-additional.mp2-expanded .mp2-details { display: block; }

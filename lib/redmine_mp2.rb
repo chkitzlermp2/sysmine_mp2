@@ -12,6 +12,7 @@ end
 
 # View hooks (safe to require at load time).
 require File.expand_path('../redmine_mp2/hooks', __FILE__)
+require File.expand_path('../redmine_mp2/field_config', __FILE__)
 
 Rails.configuration.to_prepare do
   RedmineMp2.setup

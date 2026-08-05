@@ -37,22 +37,73 @@
   // On the issue EDIT form, promote custom fields 24 and 44 into the left
   // column so they sit next to status/priority. Core renders all custom
   // fields in a separate block below .splitcontent; we relocate the two
-  // wanted ones. Runs after the DOM is ready and again after Redmine's
-  // ajax form refresh (updateIssueFrom re-renders the attributes region).
-  var MP2_PROMOTED_FIELDS = [24, 44];
+  // Read the configured "right column" field keys from the meta tag.
+  function mp2RightFields() {
+    var meta = document.querySelector('meta[name="mp2-right-fields"]');
+    if (!meta) { return []; }
+    return meta.getAttribute('content').split(',')
+      .map(function (s) { return s.trim(); })
+      .filter(function (s) { return s.length > 0; });
+  }
 
-  function promoteEditFields(root) {
+  // Find the <p> wrapper for a given field key inside the edit form.
+  // Internal fields: the input/select has id "issue_<key>" (e.g.
+  // issue_assigned_to_id), so we climb to the wrapping <p>.
+  // Custom fields: the wrapper <p> carries class "cf_<id>".
+  function mp2FindFieldWrapper(root, key) {
+    if (key.indexOf('cf_') === 0) {
+      return root.querySelector('p.' + key);
+    }
+    var input = root.querySelector('#issue_' + key);
+    if (!input) { return null; }
+    return input.closest('p');
+  }
+
+  // On the issue EDIT form, move the configured fields into a collapsible
+  // right column that mirrors the show page ("Zusätzliche Informationen").
+  function arrangeEditForm(root) {
     root = root || document;
-    var left = root.querySelector('#issue-form .splitcontentleft') ||
-               root.querySelector('.splitcontentleft');
-    if (!left) { return; }
+    var form = root.querySelector('#issue-form');
+    if (!form) { return; }
 
-    MP2_PROMOTED_FIELDS.forEach(function (id) {
-      // Core wraps each custom field <p> with class cf_<id>.
-      var field = root.querySelector('p.cf_' + id + ':not(.mp2-promoted)');
-      if (!field) { return; }
-      field.classList.add('mp2-promoted');
-      left.appendChild(field);
+    var right = form.querySelector('.splitcontentright');
+    if (!right) { return; }
+
+    var keys = mp2RightFields();
+    if (!keys.length) { return; }
+
+    // Build (once) a collapsible wrapper at the top of the right column.
+    var wrapper = form.querySelector('.mp2-edit-additional');
+    if (!wrapper) {
+      wrapper = document.createElement('div');
+      wrapper.className = 'mp2-edit-additional mp2-col-right';
+
+      var toggle = document.createElement('a');
+      toggle.href = '#';
+      toggle.className = 'mp2-toggle mp2-edit-toggle';
+      var labelMeta = document.querySelector('meta[name="mp2-additional-label"]');
+      toggle.textContent = labelMeta ? labelMeta.getAttribute('content') : 'Zusätzliche Informationen';
+
+      var details = document.createElement('div');
+      details.className = 'mp2-details';
+
+      wrapper.appendChild(toggle);
+      wrapper.appendChild(details);
+      right.insertBefore(wrapper, right.firstChild);
+
+      toggle.addEventListener('click', function (e) {
+        e.preventDefault();
+        wrapper.classList.toggle('mp2-expanded');
+      });
+    }
+    var detailsContainer = wrapper.querySelector('.mp2-details');
+
+    // Move each configured field into the details container (once).
+    keys.forEach(function (key) {
+      var p = mp2FindFieldWrapper(root, key);
+      if (!p || p.classList.contains('mp2-moved') || wrapper.contains(p)) { return; }
+      p.classList.add('mp2-moved');
+      detailsContainer.appendChild(p);
     });
   }
 
@@ -78,13 +129,13 @@
   function init() {
     initCollapse();
     initCustomerMode();
-    promoteEditFields();
+    arrangeEditForm();
     arrangeProjectOverview();
   }
 
   // Re-run after Redmine refreshes the issue form via ajax.
   document.addEventListener('ajax:complete', function () {
-    promoteEditFields();
+    arrangeEditForm();
   });
 
   if (document.readyState === 'loading') {

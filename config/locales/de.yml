@@ -20,3 +20,7 @@ de:
   label_darkmode: Kundenmodus
   label_darkmode_info: Blendet MP2-spezifische Informationen (Angebotene Stunden, ...) aus. Für Kundengespräche.
   label_mp2_additional_info: Zusätzliche Informationen
+  label_mp2_right_fields: Einklappbare Felder (Zusätzliche Informationen)
+  label_mp2_right_fields_info: Angehakte Felder erscheinen in der rechten, einklappbaren Spalte „Zusätzliche Informationen" – in der Ticket-Ansicht und im Bearbeiten-Formular. Nicht angehakte Felder bleiben links immer sichtbar.
+  label_mp2_internal_fields: Interne Felder
+  label_mp2_custom_fields: Benutzerdefinierte Felder
