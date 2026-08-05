@@ -146,11 +146,19 @@ body.mp2-customer-mode .mp2-attributes .spent-time {
    column, mirroring the show page. Fields are moved here by mp2.js based on
    the plugin's field configuration.
    -------------------------------------------------------------------------- */
-.mp2-edit-additional .mp2-toggle {
+.mp2-edit-additional .mp2-toggle,
+.mp2-edit-additional .mp2-toggle:link,
+.mp2-edit-additional .mp2-toggle:visited {
   display: inline-block;
   font-weight: bold;
   margin-bottom: 0.5em;
   cursor: pointer;
+  /* The edit form renders this near-white and unreadable. Force the same
+     blue as normal Redmine links / the view-mode toggle. */
+  color: #2a5b8c !important;
+}
+.mp2-edit-additional .mp2-toggle:hover {
+  text-decoration: underline;
 }
 .mp2-edit-additional .mp2-toggle::before {
   content: "\25B8"; /* collapsed: right triangle */
