@@ -1,7 +1,7 @@
 # Adds mp2 phase/state issue counts to the project overview action.
 # Uses Module#prepend (Redmine 7 style) instead of the removed
 # alias_method_chain / manual alias technique.
-module RedmineMp2
+module SysmineMp2
   module Patches
     module ProjectsControllerPatch
       # mp2 workflow status IDs shown in the phase overview table.
@@ -30,6 +30,6 @@ module RedmineMp2
   end
 end
 
-unless ProjectsController.included_modules.include?(RedmineMp2::Patches::ProjectsControllerPatch)
-  ProjectsController.prepend(RedmineMp2::Patches::ProjectsControllerPatch)
+unless ProjectsController.included_modules.include?(SysmineMp2::Patches::ProjectsControllerPatch)
+  ProjectsController.prepend(SysmineMp2::Patches::ProjectsControllerPatch)
 end

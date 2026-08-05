@@ -1,8 +1,8 @@
 require 'redmine'
-require File.expand_path('../lib/redmine_mp2', __FILE__)
+require File.expand_path('../lib/sysmine_mp2', __FILE__)
 
-Redmine::Plugin.register :redmine_mp2 do
-  name 'Redmine MP2 Plugin'
+Redmine::Plugin.register :sysmine_mp2 do
+  name 'Sysmine MP2 Plugin'
   author 'Christoph Kitzler'
   description 'Changes for MP2 Dev Team'
   version '2.0.0'
@@ -25,17 +25,17 @@ Redmine::Plugin.register :redmine_mp2 do
   settings(default: default_settings, partial: 'settings/mp2settings')
 
   # Top menu entry "Meine Tickets" (merged in from the former
-  # redmine_mp2_topbar plugin). Links to a saved query. The query id is
+  # sysmine_mp2_topbar plugin). Links to a saved query. The query id is
   # environment-specific — adjust query_id if it differs in your Redmine.
   menu :top_menu, :mytickets, '/issues?query_id=68', caption: 'Meine Tickets'
 end
 
-class RedmineMP2Helper
+class SysmineMP2Helper
 	
 	class << self
 
 		def plugin
-		  Redmine::Plugin.find(:redmine_mp2)
+		  Redmine::Plugin.find(:sysmine_mp2)
 		end
 		
 		# Get plugin setting value or it's default value in a safe way.

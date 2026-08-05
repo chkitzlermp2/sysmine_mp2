@@ -7,7 +7,7 @@
 # #time_loggable? method, which is what caused the 500 error on every issue
 # page. All those tweaks were reviewed and dropped (core behaviour is fine),
 # leaving just this scope. Add future overrides here as targeted methods.
-module RedmineMp2
+module SysmineMp2
   module Patches
     module IssuePatch
       def self.prepended(base)
@@ -23,6 +23,6 @@ module RedmineMp2
   end
 end
 
-unless Issue.included_modules.include?(RedmineMp2::Patches::IssuePatch)
-  Issue.prepend(RedmineMp2::Patches::IssuePatch)
+unless Issue.included_modules.include?(SysmineMp2::Patches::IssuePatch)
+  Issue.prepend(SysmineMp2::Patches::IssuePatch)
 end

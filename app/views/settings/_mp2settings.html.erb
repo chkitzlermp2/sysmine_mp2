@@ -21,7 +21,7 @@
   <div class="splitcontent">
     <div class="splitcontentleft">
       <h3><%= l(:label_mp2_internal_fields) %></h3>
-      <% RedmineMp2::FieldConfig::INTERNAL_FIELDS.each do |key, label_key| %>
+      <% SysmineMp2::FieldConfig::INTERNAL_FIELDS.each do |key, label_key| %>
         <p>
           <label>
             <%= check_box_tag 'settings[right_fields][]', key, right_keys.include?(key), :id => "mp2_rf_#{key}" %>
@@ -33,8 +33,8 @@
 
     <div class="splitcontentright">
       <h3><%= l(:label_mp2_custom_fields) %></h3>
-      <% RedmineMp2::FieldConfig.issue_custom_fields.each do |cf| %>
-        <% key = RedmineMp2::FieldConfig.cf_key(cf) %>
+      <% SysmineMp2::FieldConfig.issue_custom_fields.each do |cf| %>
+        <% key = SysmineMp2::FieldConfig.cf_key(cf) %>
         <p>
           <label>
             <%= check_box_tag 'settings[right_fields][]', key, right_keys.include?(key), :id => "mp2_rf_#{key}" %>

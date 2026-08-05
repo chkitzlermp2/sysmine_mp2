@@ -1,4 +1,4 @@
-module RedmineMp2
+module SysmineMp2
 	module Patches
 	  module MailHandlerPatch
 
@@ -73,6 +73,6 @@ module RedmineMp2
   end
 end
 
-unless MailHandler.included_modules.include? RedmineMp2::Patches::MailHandlerPatch
-  MailHandler.prepend RedmineMp2::Patches::MailHandlerPatch
+unless MailHandler.included_modules.include? SysmineMp2::Patches::MailHandlerPatch
+  MailHandler.prepend SysmineMp2::Patches::MailHandlerPatch
 end

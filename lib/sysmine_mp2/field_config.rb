@@ -5,7 +5,7 @@
 # Field keys:
 #   * internal fields  -> the Redmine attribute name, e.g. "assigned_to_id"
 #   * custom fields    -> "cf_<id>", e.g. "cf_24"
-module RedmineMp2
+module SysmineMp2
   module FieldConfig
     # Internal (core) issue fields that make sense to move. Order = display
     # order when shown. Labels use Redmine's own i18n keys so they stay
@@ -28,7 +28,7 @@ module RedmineMp2
     # The plugin setting: array of field keys that belong in the right,
     # collapsible column. Everything else stays in the left column.
     def right_field_keys
-      raw = Setting.plugin_redmine_mp2 && Setting.plugin_redmine_mp2['right_fields']
+      raw = Setting.plugin_sysmine_mp2 && Setting.plugin_sysmine_mp2['right_fields']
       Array(raw).reject(&:blank?)
     end
 

@@ -1,4 +1,4 @@
-module RedmineMp2
+module SysmineMp2
 	module Patches
 		module IssuesHelperPatch
 			def self.included(base)
@@ -76,7 +76,7 @@ module RedmineMp2
 					return if values.empty?
 					values.each_with_index do |value, i|
 						key = "cf_#{value.custom_field.id}"
-						if RedmineMp2::FieldConfig.right?(key)
+						if SysmineMp2::FieldConfig.right?(key)
 							css = "cf_#{value.custom_field.id} collapsed"
 							rows.right custom_field_name_tag(value.custom_field), show_value(value), :class => css
 						else
@@ -90,6 +90,6 @@ module RedmineMp2
 	end
 end
 
-unless IssuesHelper.included_modules.include? RedmineMp2::Patches::IssuesHelperPatch
-  IssuesHelper.send(:include, RedmineMp2::Patches::IssuesHelperPatch)
+unless IssuesHelper.included_modules.include? SysmineMp2::Patches::IssuesHelperPatch
+  IssuesHelper.send(:include, SysmineMp2::Patches::IssuesHelperPatch)
 end

@@ -5,7 +5,7 @@
 <%
   # Helper: place an internal field left or right based on the setting.
   place = lambda do |rows, key, label, value, css|
-    if RedmineMp2::FieldConfig.right?(key)
+    if SysmineMp2::FieldConfig.right?(key)
       rows.right label, value, :class => css
     else
       rows.left label, value, :class => css
