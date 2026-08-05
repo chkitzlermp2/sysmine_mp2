@@ -48,15 +48,20 @@
 
   // Find the <p> wrapper for a given field key inside the edit form.
   // Internal fields: the input/select has id "issue_<key>" (e.g.
-  // issue_assigned_to_id), so we climb to the wrapping <p>.
-  // Custom fields: the wrapper <p> carries class "cf_<id>".
+  // issue_assigned_to_id); climb to the wrapping <p>.
+  // Custom fields: in the EDIT form the "cf_<id>" class sits on the inner
+  // <input>/<span>, NOT on the <p>. So match the inner element and climb.
   function mp2FindFieldWrapper(root, key) {
+    var el = null;
     if (key.indexOf('cf_') === 0) {
-      return root.querySelector('p.' + key);
+      // Try the <p> class first (some field types), then the inner element.
+      el = root.querySelector('#issue-form p.' + key) ||
+           root.querySelector('#issue-form .' + key);
+    } else {
+      el = root.querySelector('#issue-form #issue_' + key);
     }
-    var input = root.querySelector('#issue_' + key);
-    if (!input) { return null; }
-    return input.closest('p');
+    if (!el) { return null; }
+    return el.closest('p');
   }
 
   // On the issue EDIT form, move the configured fields into a collapsible
