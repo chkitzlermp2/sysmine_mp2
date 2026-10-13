@@ -22,6 +22,7 @@ module SysmineMp2
       customer_mode = SysmineMP2Helper.get_setting(:darkmode).to_s == '1'
       right_fields = SysmineMp2::FieldConfig.right_field_keys.join(',')
       all_fields = SysmineMp2::FieldConfig.all_field_keys.join(',')
+      mp2_force_light_mode_script +
       tag.meta(name: 'mp2-customer-mode', content: customer_mode.to_s) +
         tag.meta(name: 'mp2-right-fields', content: right_fields) +
         tag.meta(name: 'mp2-all-fields', content: all_fields) +
@@ -70,6 +71,35 @@ module SysmineMp2
       end
 
       out.html_safe
+    end
+
+    private
+
+
+    # Boostmine's dark mode is browser-only: theme.js stores
+    # localStorage "mode" = "dark" and applies it very early in <head>.
+    # Nothing is stored in Redmine, so it cannot be reset in the database.
+    # This runs in <head> right after the theme scripts (Redmine renders the
+    # theme's JS before view_layouts_base_html_head) and, once per browser,
+    # removes the stored value and switches back to light. The switch itself
+    # is hidden by Custom CSS (block 25).
+    # Wrapped in try/catch: localStorage can throw (privacy mode, blocked
+    # storage) and this must never break the page.
+    def mp2_force_light_mode_script
+      javascript_tag(<<~JS)
+        (function () {
+          try {
+            if (window.localStorage && localStorage.getItem('mode') === 'dark') {
+              localStorage.removeItem('mode');
+              if (window.boostmineDark && window.boostmineDark.dark_toggle_apply) {
+                window.boostmineDark.dark_toggle_apply();
+              } else {
+                document.documentElement.classList.remove('dark');
+              }
+            }
+          } catch (e) {}
+        })();
+      JS
     end
   end
 end
